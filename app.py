@@ -8,6 +8,7 @@ app = Flask(__name__)
 addr = "xtzn-raspi.local"  # noqa
 # host = socket.gethostbyname(addr)
 host = "127.0.0.1"
+inet = socket.AF_INET
 port = 51410
 
 
@@ -55,7 +56,7 @@ def recv_and_wait(sock, count) -> bytes:
 
 def read_device_info() -> dict:
     ret = {}
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(inet, socket.SOCK_STREAM)
     sock.connect((host, port))
     sock.settimeout(2)
 
@@ -142,7 +143,7 @@ def bit_of_int_bytes(buffer: bytes, offset: int = 0, base: int = 0, pos: int = 0
 
 def power_on() -> dict:
     ret = {}
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(inet, socket.SOCK_STREAM)
     sock.connect((host, port))
     sock.settimeout(2)
 
@@ -177,7 +178,7 @@ def power_on() -> dict:
 
 def power_off() -> dict:
     ret = {}
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(inet, socket.SOCK_STREAM)
     sock.connect((host, port))
     sock.settimeout(2)
 
@@ -212,7 +213,7 @@ def power_off() -> dict:
 
 def power_state() -> dict:
     ret = {}
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(inet, socket.SOCK_STREAM)
     sock.connect((host, port))
     sock.settimeout(2)
 
@@ -268,7 +269,7 @@ def power_state() -> dict:
 
 def read_registers() -> dict:
     ret = {}
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(inet, socket.SOCK_STREAM)
     sock.connect((host, port))
     sock.settimeout(2)
 
@@ -332,7 +333,7 @@ def read_registers() -> dict:
 
 def read_battery() -> dict:
     ret = {}
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(inet, socket.SOCK_STREAM)
     sock.connect((host, port))
     sock.settimeout(2)
 
@@ -382,7 +383,7 @@ def read_battery() -> dict:
 
 def read_warnings() -> dict:
     ret = {}
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(inet, socket.SOCK_STREAM)
     sock.connect((host, port))
     sock.settimeout(2)
 
