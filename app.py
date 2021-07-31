@@ -123,6 +123,76 @@ def bit_of_int_bytes(buffer: bytes, offset: int = 0, base: int = 0, pos: int = 0
     ) >> (31 - pos)) & 1
 
 
+def power_on() -> dict:
+    ret = {}
+    sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+    sock.connect((host, port))
+    sock.settimeout(2)
+
+    try:
+        # 写命令请求帧格式
+        preamble = bytearray((
+            0x01,  # Fixed idx
+            0x06,  # Type: read register
+            0x2B,  # Fixed begin address
+            0x15,
+            0x00,  # Data: power on
+            0x01,
+        ))
+
+        preamble += crc16(preamble).tobytes()
+        assert sock.send(preamble) == 8, "Request not sent"
+
+        # 写命令响应帧格式与请求帧格式相同
+        reply = recv_and_wait(sock, 8)
+        assert reply[:8] == preamble, "Invalid response"
+
+        ret["code"] = 0
+        ret["msg"] = "ok"
+
+    except AssertionError as e:
+        ret.clear()
+        ret["error"] = str(e)
+
+    sock.close()
+    return ret
+
+
+def power_off() -> dict:
+    ret = {}
+    sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+    sock.connect((host, port))
+    sock.settimeout(2)
+
+    try:
+        # 写命令请求帧格式
+        preamble = bytearray((
+            0x01,  # Fixed idx
+            0x06,  # Type: read register
+            0x2B,  # Fixed begin address
+            0x16,
+            0x00,  # Data: power off
+            0x01,
+        ))
+
+        preamble += crc16(preamble).tobytes()
+        assert sock.send(preamble) == 8, "Request not sent"
+
+        # 写命令响应帧格式与请求帧格式相同
+        reply = recv_and_wait(sock, 8)
+        assert reply[:8] == preamble, "Invalid response"
+
+        ret["code"] = 0
+        ret["msg"] = "ok"
+
+    except AssertionError as e:
+        ret.clear()
+        ret["error"] = str(e)
+
+    sock.close()
+    return ret
+
+
 def power_state() -> dict:
     ret = {}
     sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
@@ -379,6 +449,16 @@ def info():
 @app.route('/power')
 def power():
     return jsonify(power_state())
+
+
+@app.route('/poweron', methods=["POST"])
+def poweron():
+    return jsonify(power_on())
+
+
+@app.route('/poweroff', methods=["POST"])
+def poweroff():
+    return jsonify(power_off())
 
 
 @app.route('/state')
