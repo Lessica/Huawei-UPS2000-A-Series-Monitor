@@ -1,0 +1,20 @@
+[uwsgi]
+
+venv = /home/ubuntu/ups/venv
+chdir = /home/ubuntu/ups
+plugins = python3
+mount = /=app:app
+
+master = true
+processes = 1
+;enable-threads = true
+;threads = 2
+;thunder-lock = true
+socket = /home/ubuntu/var/run/ups_service.sock
+uid = www-data
+gid = www-data
+;daemonize = /home/ubuntu/var/log/ups_service.log
+;logger = file:logfile=/home/ubuntu/var/log/ups_service.log,maxsize=20000000
+safe-pidfile = /home/ubuntu/var/run/ups_service.pid
+chmod-socket = 664
+vacuum = true
