@@ -6,8 +6,8 @@ from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 addr = "xtzn-raspi.local"  # noqa
-# host = socket.gethostbyname(addr)
-host = "127.0.0.1"
+host = socket.gethostbyname(addr)
+# host = "127.0.0.1"
 inet = socket.AF_INET
 port = 51410
 
@@ -97,7 +97,7 @@ def read_device_info() -> dict:
             all_bytes += reply
 
             if object_id == 0x87:
-                device_count = short_of_bytes(reply)
+                device_count = int_of_bytes(reply)
             else:
                 device_str = reply.decode()
                 device_dict = {}
