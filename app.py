@@ -469,12 +469,12 @@ def power():
     return jsonify(power_state())
 
 
-@app.route('/poweron', methods=["POST"])
+@app.route('/poweron', methods=["POST"])  # noqa
 def poweron():
     return jsonify(power_on())
 
 
-@app.route('/poweroff', methods=["POST"])
+@app.route('/poweroff', methods=["POST"])  # noqa
 def poweroff():
     return jsonify(power_off())
 
