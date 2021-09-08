@@ -6,7 +6,9 @@ import time
 import coloredlogs
 import requests
 
-service_socket = "192.168.100.119:8087"
+service_host = "127.0.0.1"
+service_port = 8087
+service_socket = f"{service_host}:{service_port}"
 check_interval = 300
 
 
@@ -55,12 +57,15 @@ if __name__ == '__main__':
         if battery_level < 0.2 or battery_seconds_left < 600:
             # battery drain
             logging.error("Battery drained, system will power off NOW!")
+
+            # shutdown command for macOS
             subprocess.call(['osascript', '-e',
                              'tell app "System Events" to shut down'])
 
-            # unsafe method
+            # another unsafe method
             # osascript -e 'do shell script "shutdown -h now" user name "rachel" password "" with administrator
             # privileges'
+
             break
 
         current_interval = 30

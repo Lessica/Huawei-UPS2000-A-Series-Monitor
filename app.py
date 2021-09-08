@@ -5,11 +5,13 @@ from flask import Flask, jsonify, json
 from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
-addr = "xtzn-raspi.local"  # noqa
-host = socket.gethostbyname(addr)
-# host = "127.0.0.1"
-inet = socket.AF_INET
-port = 51410
+
+serial_host = "127.0.0.1"
+serial_inet = socket.AF_INET
+serial_port = 51410
+
+service_host = "127.0.0.1"
+service_port = 8087
 
 
 @app.errorhandler(HTTPException)
@@ -56,8 +58,8 @@ def recv_and_wait(sock, count) -> bytes:
 
 def read_device_info() -> dict:
     ret = {}
-    sock = socket.socket(inet, socket.SOCK_STREAM)
-    sock.connect((host, port))
+    sock = socket.socket(serial_inet, socket.SOCK_STREAM)
+    sock.connect((serial_host, serial_port))
     sock.settimeout(2)
 
     try:
@@ -143,8 +145,8 @@ def bit_of_int_bytes(buffer: bytes, offset: int = 0, base: int = 0, pos: int = 0
 
 def power_on() -> dict:
     ret = {}
-    sock = socket.socket(inet, socket.SOCK_STREAM)
-    sock.connect((host, port))
+    sock = socket.socket(serial_inet, socket.SOCK_STREAM)
+    sock.connect((serial_host, serial_port))
     sock.settimeout(2)
 
     try:
@@ -178,8 +180,8 @@ def power_on() -> dict:
 
 def power_off() -> dict:
     ret = {}
-    sock = socket.socket(inet, socket.SOCK_STREAM)
-    sock.connect((host, port))
+    sock = socket.socket(serial_inet, socket.SOCK_STREAM)
+    sock.connect((serial_host, serial_port))
     sock.settimeout(2)
 
     try:
@@ -213,8 +215,8 @@ def power_off() -> dict:
 
 def power_state() -> dict:
     ret = {}
-    sock = socket.socket(inet, socket.SOCK_STREAM)
-    sock.connect((host, port))
+    sock = socket.socket(serial_inet, socket.SOCK_STREAM)
+    sock.connect((serial_host, serial_port))
     sock.settimeout(2)
 
     try:
@@ -269,8 +271,8 @@ def power_state() -> dict:
 
 def read_registers() -> dict:
     ret = {}
-    sock = socket.socket(inet, socket.SOCK_STREAM)
-    sock.connect((host, port))
+    sock = socket.socket(serial_inet, socket.SOCK_STREAM)
+    sock.connect((serial_host, serial_port))
     sock.settimeout(2)
 
     try:
@@ -333,8 +335,8 @@ def read_registers() -> dict:
 
 def read_battery() -> dict:
     ret = {}
-    sock = socket.socket(inet, socket.SOCK_STREAM)
-    sock.connect((host, port))
+    sock = socket.socket(serial_inet, socket.SOCK_STREAM)
+    sock.connect((serial_host, serial_port))
     sock.settimeout(2)
 
     try:
@@ -383,8 +385,8 @@ def read_battery() -> dict:
 
 def read_warnings() -> dict:
     ret = {}
-    sock = socket.socket(inet, socket.SOCK_STREAM)
-    sock.connect((host, port))
+    sock = socket.socket(serial_inet, socket.SOCK_STREAM)
+    sock.connect((serial_host, serial_port))
     sock.settimeout(2)
 
     try:
@@ -495,5 +497,4 @@ def warnings():
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(host=addr, port=(port + 1))
+    app.run(host=service_host, port=service_port)
